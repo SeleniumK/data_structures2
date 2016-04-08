@@ -229,12 +229,12 @@ def test_bst_fixture(bst_root_fifty):
 
 
 def test_in_order(bst_root_fifty):
-    assert bst_root_fifty.in_order() == [12, 25, 35, 50, 75, 100, 150]
+    assert list(bst_root_fifty.in_order()) == [12, 25, 35, 50, 75, 100, 150]
 
 
 def test_pre_order(bst_root_fifty):
-    assert bst_root_fifty.pre_order() == [50, 25, 12, 35, 100, 75, 150]
+    assert list(bst_root_fifty.pre_order()) == [50, 25, 12, 35, 100, 75, 150]
 
 
 def test_post_order(bst_root_fifty):
-    assert bst_root_fifty.post_order() == [12, 35, 25, 75, 150, 100, 50]
+    assert list(bst_root_fifty.post_order()) == [12, 35, 25, 75, 150, 100, 50]
