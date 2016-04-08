@@ -238,3 +238,7 @@ def test_pre_order(bst_root_fifty):
 
 def test_post_order(bst_root_fifty):
     assert list(bst_root_fifty.post_order()) == [12, 35, 25, 75, 150, 100, 50]
+
+
+def test_breadth_first(bst_root_fifty):
+    assert list(bst_root_fifty.breadth_first()) == [50, 25, 100, 12, 35, 75, 150]
