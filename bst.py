@@ -83,6 +83,17 @@ class Node(object):
         else:
             raise TypeError
 
+    def _breadth_helper(self):
+        if self.left_child:
+            yield self.left_child.value
+        if self.right_child:
+            yield self.right_child.value
+        if self.left_child:
+            for item in self.left_child._breadth_helper():
+                yield item
+        if self.right_child:
+            for item in self.right_child._breadth_helper():
+                yield item
 
 class Bst(object):
     """Create a Binary Search Tree Object."""
@@ -103,6 +114,12 @@ class Bst(object):
     def post_order(self):
         for item in self.root.post_order():
             yield item
+
+    def breadth_first(self):
+        yield self.root.value
+        for item in self.root._breadth_helper():
+            yield item
+
 
 
     def insert(self, value):
