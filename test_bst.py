@@ -16,6 +16,11 @@ def bst_root_fifty():
     return test_tree
 
 
+@pytest.fixture
+def empty_bst():
+    return Bst()
+
+
 def test_create_node_default():
     """Assert that you can create a node with no children."""
     test_node = Node()
@@ -242,3 +247,11 @@ def test_post_order(bst_root_fifty):
 
 def test_breadth_first(bst_root_fifty):
     assert list(bst_root_fifty.breadth_first()) == [50, 25, 100, 12, 35, 75, 150]
+
+
+def test_empty_tree_size(empty_bst):
+    assert empty_bst.size() == 0
+
+
+def test_empty_tree_contains(empty_bst):
+    assert not empty_bst.contains(5)
