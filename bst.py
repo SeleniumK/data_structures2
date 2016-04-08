@@ -152,6 +152,8 @@ class Bst(object):
         Return Boolean Value.
         """
         cursor = self.root
+        if not cursor:
+            return False
         while True:
             if cursor.value == value:
                 return True
