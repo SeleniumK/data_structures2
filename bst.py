@@ -1,4 +1,5 @@
 """Implement Binary Search Tree."""
+from collections import deque
 
 
 class Node(object):
@@ -83,17 +84,6 @@ class Node(object):
         else:
             raise TypeError
 
-    def _breadth_helper(self):
-        if self.left_child:
-            yield self.left_child.value
-        if self.right_child:
-            yield self.right_child.value
-        if self.left_child:
-            for item in self.left_child._breadth_helper():
-                yield item
-        if self.right_child:
-            for item in self.right_child._breadth_helper():
-                yield item
 
 class Bst(object):
     """Create a Binary Search Tree Object."""
@@ -104,22 +94,34 @@ class Bst(object):
         self._size = 0
 
     def pre_order(self):
+        if not self.root:
+            return
         for item in self.root.pre_order():
             yield item
 
     def in_order(self):
+        if not self.root:
+            return
         for item in self.root.in_order():
             yield item
 
     def post_order(self):
+        if not self.root:
+            return
         for item in self.root.post_order():
             yield item
 
     def breadth_first(self):
-        yield self.root.value
-        for item in self.root._breadth_helper():
-            yield item
-
+        if not self.root:
+            return
+        queue = deque([self.root])
+        while queue:
+            node = queue.pop()
+            yield node.value
+            if node.left_child:
+                queue.appendleft(node.left_child)
+            if node.right_child:
+                queue.appendleft(node.right_child)
 
 
     def insert(self, value):
