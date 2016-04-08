@@ -3,6 +3,24 @@ from bst import Node, Bst
 import random
 
 
+@pytest.fixture
+def bst_root_fifty():
+    test_tree = Bst()
+    test_tree.insert(50)
+    test_tree.insert(25)
+    test_tree.insert(100)
+    test_tree.insert(12)
+    test_tree.insert(35)
+    test_tree.insert(75)
+    test_tree.insert(150)
+    return test_tree
+
+
+@pytest.fixture
+def empty_bst():
+    return Bst()
+
+
 def test_create_node_default():
     """Assert that you can create a node with no children."""
     test_node = Node()
@@ -29,7 +47,7 @@ def test_add_left_child2():
 
 
 def test_add_left_child_expect_error():
-    """Assert that you cannot assign a child to a node when that sided child 
+    """Assert that you cannot assign a child to a node when that sided child
     already exists.
     """
     child_node = Node()
@@ -54,7 +72,7 @@ def test_add_right_child2():
 
 
 def test_add_right_child_expect_error():
-    """Assert that you cannot assign a child to a node when that sided child 
+    """Assert that you cannot assign a child to a node when that sided child
     already exists.
     """
     child_node = Node()
@@ -210,14 +228,41 @@ def test_depth():
     assert test_tree.depth() == 8
 
 
+def test_bst_fixture(bst_root_fifty):
+    assert bst_root_fifty.root.value == 50
+    assert bst_root_fifty.depth() == 3
 
 
+def test_in_order(bst_root_fifty):
+    assert list(bst_root_fifty.in_order()) == [12, 25, 35, 50, 75, 100, 150]
 
 
+def test_pre_order(bst_root_fifty):
+    assert list(bst_root_fifty.pre_order()) == [50, 25, 12, 35, 100, 75, 150]
 
 
+def test_post_order(bst_root_fifty):
+    assert list(bst_root_fifty.post_order()) == [12, 35, 25, 75, 150, 100, 50]
 
 
+def test_breadth_first(bst_root_fifty):
+    assert list(bst_root_fifty.breadth_first()) == [50, 25, 100, 12, 35, 75, 150]
 
 
+def test_empty_tree_size(empty_bst):
+    assert empty_bst.size() == 0
 
+
+def test_empty_tree_contains(empty_bst):
+    assert not empty_bst.contains(5)
+
+
+def test_empty_tree_depth(empty_bst):
+    assert empty_bst.depth() == 0
+
+
+def test_empty_tree_traversals(empty_bst):
+    assert list(empty_bst.pre_order()) == []
+    assert list(empty_bst.post_order()) == []
+    assert list(empty_bst.in_order()) == []
+    assert list(empty_bst.breadth_first()) == []

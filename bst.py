@@ -1,4 +1,5 @@
 """Implement Binary Search Tree."""
+from collections import deque
 
 
 class Node(object):
@@ -22,13 +23,38 @@ class Node(object):
             left_depth = self.left_child._depth()
         else:
             left_depth = 0
-
         if self.right_child:
             right_depth = self.right_child._depth()
         else:
             right_depth = 0
-
         return 1 + max(left_depth, right_depth)
+
+    def pre_order(self):
+        yield self.value
+        if self.left_child:
+            for item in self.left_child.pre_order():
+                yield item
+        if self.right_child:
+            for item in self.right_child.pre_order():
+                yield item
+
+    def in_order(self):
+        if self.left_child:
+            for item in self.left_child.in_order():
+                yield item
+        yield self.value
+        if self.right_child:
+            for item in self.right_child.in_order():
+                yield item
+
+    def post_order(self):
+        if self.left_child:
+            for item in self.left_child.post_order():
+                yield item
+        if self.right_child:
+            for item in self.right_child.post_order():
+                yield item
+        yield self.value
 
     @property
     def left_child(self):
@@ -67,6 +93,37 @@ class Bst(object):
         self.root = root
         self._size = 0
 
+    def pre_order(self):
+        if not self.root:
+            return
+        for item in self.root.pre_order():
+            yield item
+
+    def in_order(self):
+        if not self.root:
+            return
+        for item in self.root.in_order():
+            yield item
+
+    def post_order(self):
+        if not self.root:
+            return
+        for item in self.root.post_order():
+            yield item
+
+    def breadth_first(self):
+        if not self.root:
+            return
+        queue = deque([self.root])
+        while queue:
+            node = queue.pop()
+            yield node.value
+            if node.left_child:
+                queue.appendleft(node.left_child)
+            if node.right_child:
+                queue.appendleft(node.right_child)
+
+
     def insert(self, value):
         """Make new node and, if node not in tree, insert into tree."""
         if not isinstance(value, (int, float)):
@@ -97,6 +154,8 @@ class Bst(object):
         Return Boolean Value.
         """
         cursor = self.root
+        if not cursor:
+            return False
         while True:
             if cursor.value == value:
                 return True
@@ -115,7 +174,7 @@ class Bst(object):
 
     def depth(self):
         """Return integer representing number of levels in tree."""
-        return self.root._depth()
+        return self.root._depth() if self.root else 0
 
     def balance(self):
         """Return Balance of tree.
