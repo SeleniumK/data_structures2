@@ -259,3 +259,10 @@ def test_empty_tree_contains(empty_bst):
 
 def test_empty_tree_depth(empty_bst):
     assert empty_bst.depth() == 0
+
+
+def test_empty_tree_traversals(empty_bst):
+    assert list(empty_bst.pre_order()) == []
+    assert list(empty_bst.post_order()) == []
+    assert list(empty_bst.in_order()) == []
+    assert list(empty_bst.breadth_first()) == []
