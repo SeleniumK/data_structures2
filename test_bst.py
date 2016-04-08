@@ -255,3 +255,7 @@ def test_empty_tree_size(empty_bst):
 
 def test_empty_tree_contains(empty_bst):
     assert not empty_bst.contains(5)
+
+
+def test_empty_tree_depth(empty_bst):
+    assert empty_bst.depth() == 0

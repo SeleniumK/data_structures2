@@ -172,7 +172,7 @@ class Bst(object):
 
     def depth(self):
         """Return integer representing number of levels in tree."""
-        return self.root._depth()
+        return self.root._depth() if self.root else 0
 
     def balance(self):
         """Return Balance of tree.
