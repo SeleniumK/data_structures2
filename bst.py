@@ -205,7 +205,7 @@ class Bst(object):
             right_counter += 1
             cursor = cursor.right_child
 
-        return right_counter - left_counter
+        return left_counter - right_counter
 
     def delete(self, value):
         """Delete node with value given, and adjust tree accordingly."""
