@@ -10,12 +10,6 @@ class Node(object):
         self.value = value
         self._left_child = left_child
         self._right_child = right_child
-        if self._left_child is not None:
-            self._left_child = None
-            self.left_child = left_child
-        if self._right_child is not None:
-            self._right_child = None
-            self.right_child = right_child
         self.parent = parent
 
     @property
@@ -227,7 +221,6 @@ class Bst(object):
         node = self._contains(value)
         tree = Bst()
         ordered_list = list(node.in_order())
-        # ordered_list.remove(value)
         for to_add in rebal(ordered_list):
             if to_add == value:
                 continue
@@ -239,59 +232,6 @@ class Bst(object):
             node.parent.right_child = tree.root
         elif node.value < node.parent.value:
             node.parent.left_child = tree.root
-
-
-        # if node:
-        #     left = node.left_child
-        #     right = node.right_child
-
-        #     if not left and not right:
-        #         # if no children, assign parent's left/right child to None
-        #         if node.value > node.parent.value:
-        #             node.parent.right_child = None
-        #         else:
-        #             node.parent.left_child = None
-        #     if left and not right:
-        #         # If just left child, assign paren't left/right child to left
-        #         # or right child of node
-        #         if node.value > node.parent.value:
-        #             node.parent.right_child = node.left_child
-        #         else:
-        #             node.parent.left_child = node.left_child
-        #     if right and not left:
-        #         if node.value > node.parent.value:
-        #             node.parent.right_child = node.right_child
-        #         else:
-        #             node.parent.left_child = node.right_child
-        #     if left and right:
-        #         if node.value > node.parent.value:
-        #             node.parent.right_child = node.right_child
-        #             node.parent.right_child.left_child = node.left_child
-        #         else:
-        #             node.parent.left_child = node.right_child
-        #             node.parent.left_child.left_child = node.left_child
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
