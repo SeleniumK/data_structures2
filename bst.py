@@ -46,19 +46,14 @@ class Node(object):
             raise TypeError
 
     def leftest(self):
+        """Get the Leftest Child of this node."""
         if self.left_child:
             return self.left_child.leftest()
         else:
             return self
 
-    def rightest(self):
-        if self.right_child:
-            return self.right_child.rightest()
-        else:
-            return self
-
     def orphan_self(self, child_node):
-        """Connects given child to the parent of this node, on the correct side."""
+        """Connect given child to the parent of this node, on the correct side."""
         if self.value == self.parent.value:
             if self.parent.right_child.value == self.value:
                 self.parent.right_child = child_node
@@ -68,7 +63,6 @@ class Node(object):
             self.parent.right_child = child_node
         else:
             self.parent.left_child = child_node
-
 
     def _depth(self):
         left_depth = self.left_child._depth() if self.left_child else 0
@@ -129,7 +123,6 @@ class Node(object):
             r = random.randint(0, 1e9)
             yield "\tnull{} [shape=point];".format(r)
             yield "\t{} -> null{};".format(self.value, r)
-
 
 
 class Bst(object):
@@ -279,11 +272,10 @@ class Bst(object):
                 return
             node.orphan_self(None)
 
-
     def draw_graph(self):
+        """Draw dot graph."""
         if self.root:
             return "digraph G {{\n{}}} \t{};\n{}\n".format(self.root.value, "".join(self.root._get_dot()))
-
 
     def delete_for_fun(self, value):
         """Delete node with value given, and adjust tree accordingly.

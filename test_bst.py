@@ -298,6 +298,7 @@ def test_empty_tree_traversals(empty_bst):
     assert list(empty_bst.in_order()) == []
     assert list(empty_bst.breadth_first()) == []
 
+
 def test_get_right_leftest(empty_bst):
     empty_bst.insert(50)
     empty_bst.insert(49)
