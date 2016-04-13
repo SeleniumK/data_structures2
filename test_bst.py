@@ -318,18 +318,6 @@ def test_delete_with_no_children(empty_bst):
     empty_bst.delete(7)
     assert empty_bst.root is None
 
-
-def test_delete_bottom_rung(bst_root_fifty):
-    assert bst_root_fifty.depth() == 3
-    for num in [12, 35, 75, 150]:
-        bst_root_fifty.delete(num)
-        assert not bst_root_fifty.contains(num)
-    assert bst_root_fifty.depth() == 2
-    for num in [25, 100]:
-        assert bst_root_fifty._contains(num).left_child is None
-        assert bst_root_fifty._contains(num).right_child is None
-
-
 def test_delete_middle_root(bst_root_fifty):
     bst_root_fifty.delete(25)
     assert bst_root_fifty.root.value == 50
