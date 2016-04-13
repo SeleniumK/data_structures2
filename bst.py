@@ -1,5 +1,6 @@
 """Implement Binary Search Tree."""
 from collections import deque
+import random
 
 
 class Node(object):
@@ -44,16 +45,41 @@ class Node(object):
         else:
             raise TypeError
 
-    def _depth(self):
+    def leftest(self):
         if self.left_child:
-            left_depth = self.left_child._depth()
+            return self.left_child.leftest()
         else:
-            left_depth = 0
+            return self
+
+    def rightest(self):
         if self.right_child:
-            right_depth = self.right_child._depth()
+            return self.right_child.rightest()
         else:
-            right_depth = 0
+            return self
+
+    def orphan_self(self, child_node):
+        """Connects given child to the parent of this node, on the correct side."""
+        if self.value == self.parent.value:
+            if self.parent.right_child.value == self.value:
+                self.parent.right_child = child_node
+            else:
+                self.parent.left_child = child_node
+        elif self.value > self.parent.value:
+            self.parent.right_child = child_node
+        else:
+            self.parent.left_child = child_node
+
+
+    def _depth(self):
+        left_depth = self.left_child._depth() if self.left_child else 0
+        right_depth = self.right_child._depth() if self.right_child else 0
         return 1 + max(left_depth, right_depth)
+
+    def balance(self):
+        """Check Children and return balance of node."""
+        left_weight = self.left_child._depth() if self.left_child else 0
+        right_weight = self.right_child._depth() if self.right_child else 0
+        return left_weight - right_weight
 
     def pre_order(self):
         """Create Generator for helping Pre order Traversal."""
@@ -84,6 +110,26 @@ class Node(object):
             for item in self.right_child.post_order():
                 yield item
         yield self.value
+
+    def _get_dot(self):
+        """Recursively prepare a dot graph entry for this node."""
+        if self.left_child is not None:
+            yield "\t{} -> {};".format(self.value, self.left_child.value)
+            for i in self.left_child._get_dot():
+                yield i
+        elif self.right_child is not None:
+            r = random.randint(0, 1e9)
+            yield "\tnull{} [shape=point];".format(r)
+            yield "\t{} -> null{};".format(self.value, r)
+        if self.right is not None:
+            yield "\t{} -> {};".format(self.value, self.right_child.value)
+            for i in self.right_child._get_dot():
+                yield i
+        elif self.left_child is not None:
+            r = random.randint(0, 1e9)
+            yield "\tnull{} [shape=point];".format(r)
+            yield "\t{} -> null{};".format(self.value, r)
+
 
 
 class Bst(object):
@@ -186,29 +232,63 @@ class Bst(object):
         return self.root._depth() if self.root else 0
 
     def balance(self):
-        """Return Balance of tree.
+        """Return Balance of root node.
 
-        If Right is deeper than left, expect a positive integer.
-        Expect a negative integer is left size is deeper than right.
+        If Right is deeper than left, expect a negative integer.
+        Expect a positive integer is left size is deeper than right.
         """
-        left_counter = 0
-        right_counter = 0
-        cursor = self.root
+        return self.root.balance()
 
-        while cursor.left_child:
-            left_counter += 1
-            cursor = cursor.left_child
-
-        cursor = self.root
-
-        while cursor.right_child:
-            right_counter += 1
-            cursor = cursor.right_child
-
-        return left_counter - right_counter
+    def _get_right_leftest(self, node):
+        while True:
+            swap_node = node.right_child.leftest()
+            if not swap_node.right_child:
+                return swap_node
 
     def delete(self, value):
         """Delete node with value given, and adjust tree accordingly."""
+        node = self._contains(value)
+        if not node:
+            return False
+        self.size -= 1
+
+        if node.right_child and node.left_child:
+            swap_node = self._get_right_leftest(node)
+            node.value = swap_node.value
+            swap_node.orphan_self(None)
+
+        elif node.right_child:
+            if node.value == self.root.value:
+                self.root = node.right_child
+            elif node.value > node.parent.value:
+                node.parent.right_child = node.right_child
+            else:
+                node.parent.left_child = node.right_child
+
+        elif node.left_child:
+            if node.value == self.root.value:
+                self.root = node.left_child
+            elif node.value > node.parent.value:
+                node.parent.right_child = node.left_child
+            else:
+                node.parent.left_child = node.left_child
+
+        if not node.right_child and not node.left_child:
+            if node.value == self.root.value:
+                self.root = None
+                return
+            node.orphan_self(None)
+
+
+    def draw_graph(self):
+        if self.root:
+            return "digraph G {{\n{}}} \t{};\n{}\n".format(self.root.value, "".join(self.root._get_dot()))
+
+
+    def delete_for_fun(self, value):
+        """Delete node with value given, and adjust tree accordingly.
+        MAKE A NEW TREE. O(N^2) FOR THE WIN.
+        """
         def rebal(list_):
             mid = len(list_) >> 1
             if mid < len(list_):
@@ -232,7 +312,3 @@ class Bst(object):
             node.parent.right_child = tree.root
         elif node.value < node.parent.value:
             node.parent.left_child = tree.root
-
-
-
-
