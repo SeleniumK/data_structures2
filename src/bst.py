@@ -240,19 +240,14 @@ class Bst(object):
     def _contains(self, value):
         """Helper function: returns node matching value."""
         cursor = self.root
-        if not cursor:
-            return False
-        while True:
+        while cursor:
             if cursor.value == value:
                 return cursor
             elif value > cursor.value:
-                if cursor.right_child is None:
-                    return False
                 cursor = cursor.right_child
             else:
-                if cursor.left_child is None:
-                    return False
                 cursor = cursor.left_child
+
 
     def contains(self, value):
         """Check if node with property equal to value is in tree.
