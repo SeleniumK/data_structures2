@@ -243,7 +243,7 @@ class Bst(object):
         node = self._contains(value)
         if not node:
             return False
-        self.size -= 1
+        self._size -= 1
 
         if node.right_child and node.left_child:
             swap_node = self._get_right_leftest(node)
