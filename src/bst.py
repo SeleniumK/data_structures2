@@ -12,6 +12,7 @@ class Node(object):
         self._left_child = left_child
         self._right_child = right_child
         self.parent = parent
+        # self.balancefactor = 0
 
     @property
     def left_child(self):
@@ -171,25 +172,71 @@ class Bst(object):
         """Make new node and, if node not in tree, insert into tree."""
         if not isinstance(value, (int, float)):
             raise TypeError
-        new_node = Node(value=value)
-        self._size += 1
-        if self.root is None:
-            self.root = new_node
-        else:
-            cursor = self.root
-            while True:
-                if cursor.value == new_node.value:
-                    return
-                elif new_node.value > cursor.value:
-                    if cursor.right_child is None:
-                        cursor.right_child = new_node
-                        return
-                    cursor = cursor.right_child
-                else:
-                    if cursor.left_child is None:
-                        cursor.left_child = new_node
-                        return
-                    cursor = cursor.left_child
+        if not self._contains(value):
+            new_node = Node(value=value)
+            self._size += 1
+            if self.root is None:
+                self.root = new_node
+            else:
+                cursor = self.root
+                while True:
+                    if new_node.value > cursor.value:
+                        if cursor.right_child is None:
+                            cursor.right_child = new_node
+                            self.check_balance(cursor)
+                            return
+                        cursor = cursor.right_child
+                    else:
+                        if cursor.left_child is None:
+                            cursor.left_child = new_node
+                            self.check_balance(cursor)
+                            return
+                        cursor = cursor.left_child
+
+    def check_balance(self, node):
+        """Check node's balance. Rebalances accordingly and updates parent balance."""
+        current_balance = node.balance()
+        if current_balance > 1 or current_balance < -1:
+            self.rebalance(node)
+            return
+        if node.parent:
+            if node.parent.balance() != 0:
+                self.check_balance(node.parent)
+
+    def rotate_left(self, node):
+        """Rotate node to the left, make node.right_child new subtree root."""
+        swap = node.right_child
+        node.right_child = swap.left_child
+        if node == self.root:
+            self.root = swap
+        elif node.value > node.parent.value:
+            node.parent.right_child = swap
+        elif node.value < node.parent.value:
+            node.parent.left_child = swap
+        swap.left_child = node
+
+    def rotate_right(self, node):
+        """Rotate node to the right, make node.left_child new subtree root."""
+        swap = node.left_child
+        node.left_child = swap.right_child
+        if node == self.root:
+            self.root = swap
+        elif node.value > node.parent.value:
+            node.parent.right_child = swap
+        elif node.value < node.parent.value:
+            node.parent.left_child = swap
+        swap.right_child = node
+
+    def rebalance(self, node):
+        """Rebalance nodes."""
+        if node.balance() < 0:
+            if node.right_child.balance() > 0:
+                self.rotate_right(node.right_child)
+            self.rotate_left(node)
+        elif node.balance > 0:
+            if node.left_child.balance() < 0:
+                self.rotate_left(node.left_child)
+            self.rotate_right(node)
 
     def _contains(self, value):
         """Helper function for contains, returns node matching value."""
@@ -243,7 +290,7 @@ class Bst(object):
         node = self._contains(value)
         if not node:
             return False
-        self.size -= 1
+        self._size -= 1
 
         if node.right_child and node.left_child:
             swap_node = self._get_right_leftest(node)
@@ -277,8 +324,9 @@ class Bst(object):
         if self.root:
             return "digraph G {{\n{}}} \t{};\n{}\n".format(self.root.value, "".join(self.root._get_dot()))
 
-    def delete_for_fun(self, value):
+    def delete_node_reorg_tree(self, value):
         """Delete node with value given, and adjust tree accordingly.
+
         MAKE A NEW TREE. O(N^2) FOR THE WIN.
         """
         def rebal(list_):

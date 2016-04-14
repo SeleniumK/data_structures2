@@ -7,6 +7,7 @@ setup(
     version=0.1,
     author=["Selena Flannery", "Norton Pengra"],
     license="MIT",
+    package_dir={"": "src"},
     py_modules=["bst"],
     install_requires=["future"],
     extras_require={'test': ['pytest', 'pytest-xdist', 'tox']},
