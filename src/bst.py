@@ -52,12 +52,12 @@ class Node(object):
         else:
             return self
 
-    def orphan_self(self, child_node):
+    def orphan_self(self):
         """Connect given child to the parent of this node, on the correct side."""
         if self.value >= self.parent.value:
-            self.parent.right_child = child_node
+            self.parent.right_child = None
         else:
-            self.parent.left_child = child_node
+            self.parent.left_child = None
 
     def _depth(self):
         left_depth = self.left_child._depth() if self.left_child else 0
@@ -269,6 +269,14 @@ class Bst(object):
             if not swap_node.right_child:
                 return swap_node
 
+    def _delete_with_one_child(self, node, child):
+        if node.value == self.root.value:
+            self.root = child
+        elif node.value > node.parent.value:
+            node.parent.right_child = child
+        else:
+            node.parent.left_child = child
+
     def delete(self, value):
         """Delete node with value given, and adjust tree accordingly."""
         node = self._contains(value)
@@ -278,29 +286,16 @@ class Bst(object):
             if node.right_child and node.left_child:
                 swap_node = self._get_right_leftest(node)
                 node.value = swap_node.value
-                swap_node.orphan_self(None)
+                swap_node.orphan_self()
 
-            elif node.right_child:
-                if node.value == self.root.value:
-                    self.root = node.right_child
-                elif node.value > node.parent.value:
-                    node.parent.right_child = node.right_child
-                else:
-                    node.parent.left_child = node.right_child
-
-            elif node.left_child:
-                if node.value == self.root.value:
-                    self.root = node.left_child
-                elif node.value > node.parent.value:
-                    node.parent.right_child = node.left_child
-                else:
-                    node.parent.left_child = node.left_child
-
-            if not node.right_child and not node.left_child:
+            elif not node.right_child and not node.left_child:
                 if node.value == self.root.value:
                     self.root = None
                 else:
-                    node.orphan_self(None)
+                    node.orphan_self()
+            else:
+                child = node.right_child if node.right_child else node.left_child
+                self._delete_with_one_child(node, child)
 
     def draw_graph(self):
         """Draw dot graph."""
