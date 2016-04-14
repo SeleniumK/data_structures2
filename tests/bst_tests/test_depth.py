@@ -16,7 +16,10 @@ def test_depth(empty_bst):
     empty_bst.insert(10)
     empty_bst.insert(11)
     empty_bst.insert(12)
-    assert empty_bst.depth() == 8
+    # before self balancing functionality
+    # assert empty_bst.depth() == 8
+    # after self balancing functionality
+    assert empty_bst.depth() == 4
 
 
 def test_bst_fixture_depth(bst_root_fifty):
