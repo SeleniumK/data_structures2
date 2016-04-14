@@ -171,7 +171,7 @@ class Bst(object):
         """Make new node and, if node not in tree, insert into tree."""
         if not isinstance(value, (int, float)):
             raise TypeError
-        if not self._contains(value):
+        if not self.contains(value):
             new_node = Node(value=value)
             self._size += 1
             if self.root is None:
@@ -197,10 +197,8 @@ class Bst(object):
         current_balance = node.balance()
         if current_balance > 1 or current_balance < -1:
             self.rebalance(node)
-            return
-        if node.parent:
-            if node.parent.balance() != 0:
-                self.check_balance(node.parent)
+        elif node.parent and node.parent.balance() != 0:
+            self.check_balance(node.parent)
 
     def rotate_left(self, node):
         """Rotate node to the left, make node.right_child new subtree root."""
@@ -243,10 +241,7 @@ class Bst(object):
         while cursor:
             if cursor.value == value:
                 return cursor
-            elif value > cursor.value:
-                cursor = cursor.right_child
-            else:
-                cursor = cursor.left_child
+            cursor = cursor.right_child if value > cursor.value else cursor.left_child
 
 
     def contains(self, value):
