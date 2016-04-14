@@ -12,7 +12,6 @@ class Node(object):
         self._left_child = left_child
         self._right_child = right_child
         self.parent = parent
-        # self.balancefactor = 0
 
     @property
     def left_child(self):
@@ -239,7 +238,7 @@ class Bst(object):
             self.rotate_right(node)
 
     def _contains(self, value):
-        """Helper function for contains, returns node matching value."""
+        """Helper function: returns node matching value."""
         cursor = self.root
         if not cursor:
             return False
