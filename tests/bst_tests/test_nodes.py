@@ -13,7 +13,7 @@ def test_add_left_child():
     """Assert successful adding of left child and setting of child's parent."""
     child_node = Node()
     test_node = Node()
-    test_node.left_child = child_node
+    child_node.parent = test_node
     assert test_node.left_child is child_node
     assert child_node.parent is test_node
 
