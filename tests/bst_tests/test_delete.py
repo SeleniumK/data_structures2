@@ -93,9 +93,9 @@ def test_delete_grampa(bst_root_fifty):
     bst_root_fifty.insert(13)
     bst_root_fifty.delete(25)
     root_left_child = bst_root_fifty.root.left_child
-    assert root_left_child.value == 35
-    assert root_left_child.left_child.value == 12
-    assert root_left_child.right_child is None
+    assert root_left_child.value ==12 
+    assert root_left_child.left_child.value == 6
+    assert root_left_child.right_child.value == 35
 
 
 def test_delete_parent_one_child(bst_root_fifty):

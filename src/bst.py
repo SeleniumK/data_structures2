@@ -25,7 +25,7 @@ class Node(object):
         if node is None:
             self._parent = None
         elif isinstance(node, Node):
-            if self.value > node.value:
+            if self.value and self.value > node.value:
                 node.right_child = self
             else:
                 node.left_child = self
@@ -38,10 +38,13 @@ class Node(object):
 
     def orphan_self(self, child):
         """Connect given child to the parent of this node, on the correct side."""
-        if self.value >= self.parent.value:
-            self.parent.right_child = child
+        if child is None:
+            if self.value >= self.parent.value:
+                self.parent.right_child = None
+            else:
+                self.parent.left_child = None
         else:
-            self.parent.left_child = child
+            child.parent = self.parent
 
 
     def _depth(self):
@@ -174,11 +177,12 @@ class Bst(object):
 
     def check_balance(self, node):
         """Check node's balance. Rebalances accordingly and updates parent balance."""
-        current_balance = node.balance()
-        if current_balance > 1 or current_balance < -1:
-            self.rebalance(node)
-        elif node.parent and node.parent.balance() != 0:
-            self.check_balance(node.parent)
+        if node:
+            current_balance = node.balance()
+            if current_balance > 1 or current_balance < -1:
+                self.rebalance(node)
+            elif node.parent and node.parent.balance() != 0:
+                self.check_balance(node.parent)
 
     def rotate_left(self, node):
         """Rotate node to the left, make node.right_child new subtree root."""
@@ -204,7 +208,7 @@ class Bst(object):
             if node.right_child.balance() > 0:
                 self.rotate_right(node.right_child)
             self.rotate_left(node)
-        elif node.balance > 0:
+        elif node.balance() > 0:
             if node.left_child.balance() < 0:
                 self.rotate_left(node.left_child)
             self.rotate_right(node)
@@ -239,7 +243,7 @@ class Bst(object):
         If Right is deeper than left, expect a negative integer.
         Expect a positive integer is left size is deeper than right.
         """
-        return self.root.balance()
+        return self.root.balance() if self.root else 0
 
     def _get_right_leftest(self, node):
         while True:
@@ -252,14 +256,16 @@ class Bst(object):
         parent = swap_node.parent
         node.value = swap_node.value
         swap_node.orphan_self(None)
-        # self.check_balance(parent)
+        self.check_balance(parent)
 
     def _delete_node(self, node, child):  # child can be a node or None
+        parent = node.parent
         if node.value == self.root.value:
             self.root = child
+            self.check_balance(child)
         else:
             node.orphan_self(child)
-        # self.check_balance(child)
+            self.check_balance(parent)
 
     def delete(self, value):
         """Delete node with value given, and adjust tree accordingly."""
@@ -268,7 +274,7 @@ class Bst(object):
             self._size -= 1
             if node.right_child and node.left_child:
                 self._delete_node_with_two_children(node)
-            else: 
+            else:
                 child = node.right_child if node.right_child else node.left_child
                 self._delete_node(node, child)
 
