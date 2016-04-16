@@ -126,13 +126,13 @@ def test_balance_6_nodes_insert(tree_list):
         assert not tree.contains(i)
         assert tree.balance() in [-1, 0, 1]
 
-@pytest.mark.parametrize("tree_list", SIX_NODE_TREE)
+@pytest.mark.parametrize("tree_list", FIVE_NODE_TREE)
 def test_balance_6_nodes_insert(tree_list):
     tree = Bst()
     for i in tree_list:
         tree.insert(i)
         assert tree.balance() in [-1, 0, 1]
-    for i in range(6):
+    for i in range(5):
         tree.delete(i)
         assert not tree.contains(i)
         assert tree.balance() in [-1, 0, 1]
