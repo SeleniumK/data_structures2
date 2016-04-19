@@ -1,5 +1,5 @@
-# Data Structures
-A collection of classical data structures
+# Data Structures & Sorting Algorithms
+A collection of classical data structures and Sorting Algorithms
 
 ## BST
 A self balancing binary search tree.
@@ -27,3 +27,10 @@ insert(value):
     into the appropriate spot on the tree.
 
 TODO:
+
+
+## insertion
+
+`insertion_sort(list)`:
+    Takes a list of integers and sorts them smallest to biggest using the insertion_sort
+    insertion algorithm.
