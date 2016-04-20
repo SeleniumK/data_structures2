@@ -1,10 +1,13 @@
 class HashTable(object):
+    """Create a hash table."""
 
     def __init__(self, buckets=1024):
+        """Initialize instance of hash table."""
         self.buckets = buckets
         self.init_table()
 
     def init_table(self):
+        """Initialize table in hashtable."""
         self._table = []
         for x in range(self.buckets):
             self._table.append([])
