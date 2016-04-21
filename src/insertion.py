@@ -1,5 +1,3 @@
-from itertools import permutations
-
 def insertion_sort(lst):
     new_lst = lst[:]
     for i, node in enumerate(lst):
