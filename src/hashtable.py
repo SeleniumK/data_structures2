@@ -4,21 +4,20 @@ class HashTable(object):
     def __init__(self, buckets=1024):
         """Initialize instance of hash table."""
         self.buckets = buckets
-        self.init_table()
-
-    def init_table(self):
-        """Initialize table in hashtable."""
         self._table = []
         for x in range(self.buckets):
             self._table.append([])
 
+
     def get(self, key):
+        """Get a value given a key."""
         bn = self._hash(key) % self.buckets
         for k, value in self._table[bn]:
             if k == key:
                 return value
 
     def set(self, key, value):
+        """Set a value given a key and value."""
         bn = self._hash(key) % self.buckets
         self._table[bn].append((key, value))
 
