@@ -62,23 +62,23 @@ class Trie(object):
                 focus = focus[char]
         focus['*'] = '$'
 
-    def traversal(self, start):
-        start = 'n'
-
-
-        def give_me_your_children(start, word=[]):
-            import pudb; pudb.set_trace()
-            if start == '$':
-                yield "".join(word)
-            else:
-                for key, value in start.items():
-                    if key != '*':
-                        word.append(key)
-                    for result in give_me_your_children(value, word):
-                        yield result
-                    # yield word + list(give_me_your_children(value, word))
-
-        return list(give_me_your_children(self.graph_dict))
+    # def traversal(self, start):
+    #     start = 'n'
+    #
+    #
+    #     def give_me_your_children(start, word=[]):
+    #         import pudb; pudb.set_trace()
+    #         if start == '$':
+    #             yield "".join(word)
+    #         else:
+    #             for key, value in start.items():
+    #                 if key != '*':
+    #                     word.append(key)
+    #                 for result in give_me_your_children(value, word):
+    #                     yield result
+    #                 # yield word + list(give_me_your_children(value, word))
+    #
+    #     return list(give_me_your_children(self.graph_dict))
 
         # flattened = give_me_your_children(self.graph_dict)
         # import json
@@ -126,28 +126,3 @@ class Trie(object):
 
     def __str__(self):
         return json.dumps(x.graph_dict, indent=2).replace('"', "").replace("  ", "| ")
-
-
-x = Trie()
-x.insert("Norton")
-x.insert("No")
-x.insert("North")
-x.insert("Nortron")
-x.insert("Selena")
-x.insert("Kent")
-print(x.traversal('asdf'))
-# x.insert("Integer")
-# x.insert("Interest")
-# x.insert("Int")
-# x.insert('immutable')
-# x.insert("Norton")
-# x.insert("No")
-# x.insert("Noon")
-# x.insert("North")
-# x.insert("Norway")
-# x.insert("Nocturne")
-# x.insert("Legend")
-# x.insert("League")
-# x.insert("Leashed")
-# x.insert("Leash")
-# print(x)
