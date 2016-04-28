@@ -1,5 +1,6 @@
 import pytest
 from src.bst import Bst, Node
+from src.trie import Trie
 
 # BST Fixtures
 @pytest.fixture
@@ -27,3 +28,13 @@ def three_bst():
 @pytest.fixture
 def empty_bst():
     return Bst()
+
+
+@pytest.fixture
+def simple_trie():
+    x = Trie()
+    x.insert("Norton")
+    x.insert("North")
+    x.insert("Nortron")
+    x.insert("Nord")
+    return x
