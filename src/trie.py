@@ -1,8 +1,9 @@
-import json
+# import json
+
 
 class Trie(object):
     """
-    Turn words into graph objects... so "Norton", "North", "Integer", "Interesting", "Int" becomes ->
+    Turn words into graph objects... so "Norton", "North", "Integer", "Interesting", "Int" becomes ->.
 
     {
         *: {
@@ -49,80 +50,53 @@ class Trie(object):
     }
 
     """
-    children = 'abcdefghijklmnopqrstuvwxyz-\''
 
-    def __init__(self):
-        self.graph_dict = {}
+    allowed_chars = 'abcdefghijklmnopqrstuvwxyz-\''
+
+    def __init__(self, init_graph=None):
+        """Init Trie Instance."""
+        self.children = init_graph or {}
+        self._terminated = False
 
     def insert(self, word):
-        focus = self.graph_dict
+        """Insert word into Trie."""
+        focus = self
         for char in word.lower():
-            if char in self.children:
-                focus.setdefault(char, {})
-                focus = focus[char]
-        focus['*'] = '$'
+            if char in self.allowed_chars:
+                focus.children.setdefault(char, Trie())
+                focus = focus.children[char]
+        focus._terminated = True
 
-    # def traversal(self, start):
-    #     start = 'n'
-    #
-    #
-    #     def give_me_your_children(start, word=[]):
-    #         import pudb; pudb.set_trace()
-    #         if start == '$':
-    #             yield "".join(word)
-    #         else:
-    #             for key, value in start.items():
-    #                 if key != '*':
-    #                     word.append(key)
-    #                 for result in give_me_your_children(value, word):
-    #                     yield result
-    #                 # yield word + list(give_me_your_children(value, word))
-    #
-    #     return list(give_me_your_children(self.graph_dict))
+    def _traverse(self, start):
+        """Helper method to traverse tree."""
+        if self._terminated:
+            yield start
+        for key, value in self.children.items():
+            for result in value._traverse(start + key):
+                yield result
 
-        # flattened = give_me_your_children(self.graph_dict)
-        # import json
-        #
-        # print(list(flattened))
-        # print(json.dumps(list(chain.from_iterable(flattened)), indent=2).replace('\"', ''))
-
-        # while stack:
-        #     print(word)
-        #     for key, value in stack.pop().items():
-        #         if key == '*' and value == '$':
-        #             yield ''.join(word)
-        #         else:
-        #             word.append(key)
-        #             stack.append(value)
-        # print(word)
-
-
-    # def delete(self, word):
-    #     focus = self.graph_dict
-    #     remove_index = None
-    #     for i, letter in enumerate(word.lower() + '*'):
-    #         try:
-    #             if len(focus.keys()) == 1 and not remove_index:
-    #                 remove_index = i
-    #             elif len(focus.keys()) > 1:
-    #                 remove_index = None
-    #             focus = focus[letter]
-    #         except KeyError:
-    #             return False
-    #
-    #     return remove_index
+    def traversal(self, start):
+        """Return generator of words in tree from starting point."""
+        return self._contains(start)._traverse(start)
 
     def _contains(self, value):
-        focus = self.graph_dict
+        """Return dictionary of last character in value."""
+        focus = self
         for letter in value.lower():
-            focus = focus.get(letter)
+            focus = focus.children.get(letter)
             if not focus:
                 return False
-        return focus
+        if focus._terminated:
+            return focus
 
     def __contains__(self, value):
-        return bool(self._contains(value + '*'))
+        """Return Boolean value of _contains.
 
+        Checks if word in trie.
+        """
+        focus = self._contains(value)
+        return bool(focus) and focus._terminated
 
-    def __str__(self):
-        return json.dumps(x.graph_dict, indent=2).replace('"', "").replace("  ", "| ")
+    # def __str__(self):
+    #     """String representation of trie."""
+    #     return json.dumps(self.children, indent=2).replace('"', "").replace("  ", "| ")

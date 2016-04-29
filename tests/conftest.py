@@ -31,10 +31,11 @@ def empty_bst():
 
 
 @pytest.fixture
-def simple_trie():
+def simple_trie(scope="function"):
     x = Trie()
     x.insert("Norton")
     x.insert("North")
     x.insert("Nortron")
     x.insert("Nord")
+    x.insert("No")
     return x
