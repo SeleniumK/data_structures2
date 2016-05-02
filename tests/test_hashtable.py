@@ -1,4 +1,5 @@
 from src.hashtable import HashTable
+import pytest
 
 
 def test_init_starts_up():
@@ -67,3 +68,25 @@ def test_a_ton_of_stuff():
         vals["".join(chars[:5])] = "".join(chars[-5:])
     for key in vals:
         assert H.get(key) == vals[key]
+
+def test_get_is_none():
+    H = HashTable(1)
+    H.set("Waffles", "value1")
+    H.set("asdf", "value2")
+    H.set("leu23", "value3")
+    assert H.get("foo") is None
+
+
+def test_set_typeerror():
+    h = HashTable(1)
+    with pytest.raises(TypeError):
+        h.set(1, "foo")
+
+
+def test_get_typeError():
+    H = HashTable(1)
+    H.set("Waffles", "value1")
+    H.set("asdf", "value2")
+    H.set("leu23", "value3")
+    with pytest.raises(TypeError):
+        H.get(1)
