@@ -26,8 +26,15 @@ insert(value):
     If value not contained in tree, insert new node containing value
     into the appropriate spot on the tree.
 
+## Merge Sort
+    Implementation of the Merge Sort.
 
-## insertion
+    Merge sort recursively splits the list in half and creates a 
+    new list by comparing items from left to right in each of those lists.
+
+    Time Complexity: O(nlogn)
+
+## Insertion
 
 `insertion_sort(list)`:
     Takes a list of integers and sorts them smallest to biggest using the insertion_sort

@@ -3,6 +3,7 @@ from itertools import permutations
 from src.mergesort import merge_sort
 
 TO_SORT = (
+    [['foo', 'sarah', 'bob']] +
     [[]] +
     [[1]] +
     list(map(list, permutations(range(4)))) +
