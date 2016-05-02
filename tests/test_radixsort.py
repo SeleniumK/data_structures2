@@ -7,7 +7,7 @@ TO_SORT = (
     [[1]] +
     list(map(list, permutations(range(2)))) +
     list(map(list, permutations(range(6)))) +
-    list(map(list, permutations(range(12))))
+    list(map(list, permutations(range(9, 12))))
 )
 
 
