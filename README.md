@@ -26,11 +26,12 @@ insert(value):
     If value not contained in tree, insert new node containing value
     into the appropriate spot on the tree.
 
-TODO:
-
 
 ## insertion
 
 `insertion_sort(list)`:
     Takes a list of integers and sorts them smallest to biggest using the insertion_sort
     insertion algorithm.
+
+## HashTable
+    Basic Implementation of a Hash Table using an additive method.
