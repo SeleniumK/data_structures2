@@ -79,6 +79,13 @@ class Trie(object):
         """Return generator of words in tree from starting point."""
         return self._contains(start)._traverse(start)
 
+    def autocomplete(self, token):
+        """Return list of the next 4 words based on letter provided."""
+        pointer = self._contains(token)
+        if not pointer:
+            return []
+        return [x for x in sorted(pointer._traverse(token))][:4]
+
     def _contains(self, value):
         """Return dictionary of last character in value."""
         focus = self
@@ -86,8 +93,7 @@ class Trie(object):
             focus = focus.children.get(letter)
             if not focus:
                 return False
-        if focus._terminated:
-            return focus
+        return focus
 
     def __contains__(self, value):
         """Return Boolean value of _contains.
