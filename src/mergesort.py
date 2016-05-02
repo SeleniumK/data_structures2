@@ -39,6 +39,9 @@ if __name__ == "__main__":
 
     print("""Merge sort recursively splits the list in half and creates 
 a new list by comparing items from left to right in each of those lists.""")
+    print("""Best case is an already sorted list.
+        Best case time complexity is O(nlogn). This is roughtly the same as 
+        worst case""")
     print()
 
     print("Input: [2, 1]")
