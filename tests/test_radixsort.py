@@ -14,4 +14,10 @@ TO_SORT = (
 @pytest.mark.parametrize("lst", TO_SORT)
 def test_radix(lst):
     copy = lst[:]
-    assert radix_sort(lst) == sorted(copy)
+    assert list(radix_sort(lst)) == sorted(copy)
+
+
+def test_valueerror_radix():
+    lst = ["foo", "sarah"]
+    with pytest.raises(ValueError):
+        radix_sort(lst)
